@@ -1,0 +1,48 @@
+Task: Generate synthetic English LinkedIn posts, daily updates, and professional stories to train an AI-topic text classifier.
+
+OUTPUT FORMAT:
+Output exact CSV lines. NO markdown headers, NO markdown code block wrappers (```), NO row numbers, and NO conversational filler text:
+"post content text here", "yes_or_no"
+
+RULES:
+1. Each line MUST contain two double-quoted strings separated by a comma:
+   - String 1: A LinkedIn post, daily routine update, career announcement, thought-leadership question, or personal story in English.
+   - String 2: "yes" (if the text is about AI, LLMs, Machine Learning, AI tools, or AI agents) or "no" (if it is NOT about AI).
+2. Maintain a strict 50/50 balance between "yes" and "no" examples.
+3. DIVERSITY & RANDOM SAMPLING INSTRUCTION:
+   - CYCLE RANDOMLY across the Knowledge Base below. Do NOT over-index on major brands (like OpenAI or ChatGPT). Actively sample from niche, open-source, infra, and specialized AI tools.
+   - Vary post length wildly: From short 5-word status updates to long, multi-sentence storytelling paragraphs.
+   - Include typical social elements across both categories: hashtags, line breaks, daily routine observations, promotional links, and open engagement questions.
+
+4. CONTEXT REFERENCE KNOWLEDGE BASE:
+
+   [AI Topics & Tools - ALWAYS "yes"]
+   - AI Companies & Research Labs: OpenAI, Anthropic, Google DeepMind, Meta AI, Mistral AI, DeepSeek, xAI, Perplexity, Cohere, Midjourney, ElevenLabs, RunwayML, Stability AI, AI21 Labs, Hugging Face, Scale AI, Together AI, Groq (hardware/inference), Cerebras, Replicate, Anyscale, Fireworks AI, Writer, Harvey AI, Glean.
+   - Models & Architectures: GPT-4o, GPT-5, Claude Sonnet, Claude Opus, Gemini 2.5, Gemini 3, Llama 3, DeepSeek-R1, Qwen 2.5, Mistral Large, Mixtral, Grok, Command R+, Sora, Flux.1, SDXL, Whisper, CosyVoice, Gemini Flash, Phi-3, Gemma 2, Yi-34B.
+   - AI Developer Tools, IDEs & Frameworks: Cursor, Claude Code, GitHub Copilot, v0 by Vercel, Windsurf, Devin, Ollama, LangChain, LlamaIndex, vLLM, Qodo, CodeRabbit, AutoGen, CrewAI, DSPy, Axolotl, Unsloth, LM Studio, Jan.ai, Replit Agent, Aider.
+   - Vector Databases & Storage: Pinecone, Qdrant, Milvus, ChromaDB, Weaviate, Pgvector, Marqo, LanceDB.
+   - AI Concepts & Infrastructure: RAG (Retrieval-Augmented Generation), fine-tuning, PEFT, LoRA, QLoRA, embeddings, prompt engineering, LLM inference, autonomous agents, AI orchestrators, vision-language models (VLMs), synthetic data generation, RLHF, DPO, AI voice cloning, AI video synthesis, context window expansion, function calling, agentic workflows, guardrails, model quantization (GGUF/AWQ).
+
+   [Non-AI Tech & Standard Software - "no"]
+   * CRITICAL: Posts mentioning software or engineering are ONLY "no" if they focus on traditional development, manual architecture, or general tooling WITHOUT any AI, copilots, or machine learning.
+   - Frameworks & Languages: React, Next.js, Vue, Svelte, Angular, TypeScript, JavaScript, Python, Rust, Go, C++, Java, Kotlin, Swift, Flutter, React Native, Tailwind CSS.
+   - Backend, Databases & Infra: Node.js, Express, Django, FastAPI, PostgreSQL, MySQL, Redis, MongoDB, Supabase, Prisma, GraphQL, REST API, Docker, Kubernetes, Terraform, Nginx, Apache Kafka, RabbitMQ.
+   - Cloud & Developer Tools: AWS (S3, EC2, Lambda), GCP, Azure, Vercel, Netlify, Railway, Render, Cloudflare, Git, GitHub, GitLab, VS Code, Postman, Linux, Bash, Neovim, Jira, Datadog.
+
+   [General Career & Business Topics - "no"]
+   - Career Updates: Promotions, job changes, anniversaries, team hiring, leadership quotes, networking events, sales milestones, quarterly goals, performance reviews.
+
+   [Daily Routine & Non-Work Personal Life - ALWAYS "no"]
+   - Personal Life: Morning routines, coffee shop visits, workouts/gym updates, marathon training, weekend hobbies, dog walking, family time, meal prep, travel delays, favorite books, holiday celebrations, gardening, home improvement.
+
+FEW-SHOT EXAMPLES OF DESIRED OUTPUT:
+"Today I just got promoted from Sales Lead to Regional Director. I am glad we are taking this step, here is the link to my full project summary: [http://www.mynewjob.com/story](http://www.mynewjob.com/story)", "no"
+"Excited to announce that our team just deployed Claude Code across our entire engineering org. We saw a 35% drop in PR cycle times in week one!", "yes"
+"My morning routine for staying sane: 5 AM wake up, 20-minute run with my dog, black coffee, and no phone until 8 AM. How do you start your day?", "no"
+"Do you think the future will bring new operational challenges for companies that grow plants inside of commercial office buildings?", "no"
+"Switched our customer support knowledge base from Elasticsearch to a hybrid RAG pipeline using Pinecone vector databases and GPT-4o. The retrieval accuracy gains are insane.", "yes"
+"Hit a new personal record on my 5k run this morning before starting the workday. Great energy for the rest of the week! #fitness #balance", "no"
+"Is prompt engineering actually a long-term career, or will autonomous AI agents render it obsolete by next year? Curious to hear your thoughts.", "yes"
+"Spent the entire weekend working on my backyard garden and baking sourdough bread with the kids. Ready for Monday!", "no"
+"We just quantized our open-source models using Unsloth and reduced VRAM usage by 60% without sacrificing benchmark evaluation metrics.", "yes"
+"After 10 incredible years at Acme Corp, today is my last day. I want to thank my incredible mentors and team. Excited for the next chapter!", "no"

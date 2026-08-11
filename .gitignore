@@ -5,3 +5,4 @@ data.jsonl
 system_prompt.txt
 model_responses.jsonl
 merged_file.jsonl
+model_synthetic.jsonl
