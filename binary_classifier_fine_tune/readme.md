@@ -1,7 +1,21 @@
 
+## Summary
+
+This folder contains code to build data for fine-tunning a simple classifier.
+
+The core idea is to use a LLM to correctly label the training dataset and use it to refine a smaller model.
+
+The published repository uses sample/fake data at `sample_training_data.jsonl` and `sample_system_prompt.txt`. See those files to understand how to supply real data.
+
+- Fill `training_data.jsonl` with input data,
+- Fill `system_prompt.txt` with the instruction set,
+- Run `reference_fetcher_Gemini/Groq/etc.py` to use the desired LLM to ground reference your data,
+- Run `merge_reference_with_data.py` to merge training data with reference answer.
 
 ## Notes
 
+### Dependencies
+`python_requirements.txt` : you can filter out backends that you don't plan to use (eg.: remove Groq if using only Gemini)
 
 ### Gemini Response Format
 (as observed at the time)
