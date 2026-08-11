@@ -17,6 +17,8 @@ The published repository uses sample/fake data at `sample_training_data.jsonl` a
 ### Dependencies
 `python_requirements.txt` : you can filter out backends that you don't plan to use (eg.: remove Groq if using only Gemini)
 
+The "merge" step is present because I decided to instruct the model not to return back the text which it was prompted to classify, to save tokens and remote processing power. The strategy is to return the id-number and match locally to the prompt text.
+
 ### Gemini Response Format
 (as observed at the time)
 ```py
