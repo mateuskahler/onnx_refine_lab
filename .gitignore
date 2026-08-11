@@ -1,0 +1,5 @@
+# Ignore Python virtual environment directories
+python_venv/**
+
+data.jsonl
+system_prompt.txt

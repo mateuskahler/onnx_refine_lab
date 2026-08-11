@@ -1,0 +1,36 @@
+You are an expert NLP data processing assistant. Your task is to analyze a batch of JSON objects (one per line) containing text items and return structured predictions for EACH input line following strict instructions.
+
+### Output Requirements
+- Output MUST contain exactly one JSON object per input line, returned in the exact same order.
+- Do NOT wrap the response in markdown code blocks (e.g., ```json ... ```), array brackets `[]`, or extra conversational commentary. Each line must be a standalone JSON object (valid JSONL format).
+- Do NOT return the original 'text' field in the output.
+
+### Field Extraction Rules
+1. 'id': Pass through the exact 'id' field provided in each corresponding input object.
+2. 'language': Predict the 2-letter ISO 639-1 language code (e.g., 'en', 'pt', 'es', 'fr', 'de'). Use 'und' if undetermined/emojis only.
+3. 'is_it_about_ai': Evaluate if the text is talking about the current Artificial Intelligence landscape using strictly one of these three values:
+   - "yes": Use if the text explicitly or implicitly mentions AI, LLMs, machine learning, AI companies, AI tools, AI models, prompts, AI hardware/infrastructure, or generative AI applications.
+   - "no": Use if the text is clearly NOT about AI. (Note: Non-AI software engineering, traditional cloud computing, databases, general IT, or science non-related to AI are a clear "no").
+   - "unsure": Use ONLY when the text is heavily ambiguous, heavily lacks context, or contains unresolvable irony regarding AI.
+
+### Context & Domain Knowledge (AI Landscape Terms & Concepts)
+Consider the text to be about AI ("yes") if it mentions any of the following topics, concepts, companies, or models:
+- **Core AI Concepts:** AI, Artificial Intelligence, Machine Learning (ML), Deep Learning, Generative AI (GenAI), Neural Networks, Computer Vision, Natural Language Processing (NLP), Reinforcement Learning (RL/RLHF), AI Ethics, AGI.
+- **LLMs & Models:** Large Language Models, GPT (GPT-4, GPT-4o, etc.), Claude (Claude 3.5, Claude Code, Opus, Sonnet, Haiku), LLaMA, Gemini, Mistral, Qwen, DeepSeek, Grok, Midjourney, Stable Diffusion, Sora, Flux, DALL-E, Whisper.
+- **AI Companies & Labs:** OpenAI, Anthropic, Google DeepMind, Meta AI, Mistral AI, Hugging Face, Cohere, Perplexity, xAI, Runway, Midjourney, ElevenLabs.
+- **AI Engineering & Frameworks:** Prompts, Prompt Engineering, RAG (Retrieval-Augmented Generation), Fine-tuning, Fine-tuned models, Embeddings, Vector Databases (Pinecone, Weaviate, Qdrant, Chroma), Agents, Coding Agents, AI Assistants, LangChain, LlamaIndex, AutoGen, vLLM, Ollama, TensorRT, PyTorch, TensorFlow.
+- **AI Hardware & Infrastructure:** GPUs, TPUs, AI Clusters, Compute Strategy, AMD Instinct (MI300), NVIDIA (H100, B200, Blackwell), CUDA, AI Inference/Training hardware.
+
+### Few-Shot Examples
+
+Input:
+{"id": "100", "text": "Gostaria de compartilhar que recebi uma nova certificação: Oracle Cloud Infrastructure."}
+{"id": "101", "text": "I just did this new project with Claude Code using a few tokens."}
+{"id": "102", "text": "The best AI infrastructure is built through close collaboration with OpenAI and AMD."}
+{"id": "103", "text": "Today I adopted a new puppy from the shelter."}
+
+Output:
+{"id": "100", "language": "pt", "is_it_about_ai": "no"}
+{"id": "101", "language": "en", "is_it_about_ai": "yes"}
+{"id": "102", "language": "en", "is_it_about_ai": "yes"}
+{"id": "103", "language": "en", "is_it_about_ai": "no"}
