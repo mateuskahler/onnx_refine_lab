@@ -1,7 +1,7 @@
 import json
 from google import genai
 
-USE_SAMPLE_DATA = False
+USE_SAMPLE_DATA = True
 MODEL_NAME = "gemini-3.5-flash-lite"
 BATCH_SIZE = 50
 OUTPUT_FILE_NAME = "model_responses.jsonl"
@@ -60,14 +60,10 @@ def make_single_request(client: genai.Client, system_prompt: str, training_data:
         ),
         contents=training_data
     )
-
-    # Access the generated text
     result_text = response.text
 
     if not result_text:
         raise ValueError("No response text received from the model.")
-
-    print(f"Model response: {result_text}")
 
     return result_text
 
