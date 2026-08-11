@@ -1,9 +1,10 @@
-
 import json
 from groq import Groq
 
 USE_SAMPLE_DATA = True
 MODEL_NAME = "llama-3.1-8b-instant"
+BATCH_SIZE = 50
+OUTPUT_FILE_NAME = "model_responses.jsonl"
 
 
 # decide between sample data and real/local data
@@ -26,7 +27,7 @@ def get_api_key() -> str:
 
 
 def create_groq_client() -> Groq:
-    return Groq(api_key=get_api_key())
+    return Groq(api_key=get_api_key(), max_retries=5)
 
 
 def load_system_prompt(file_path: str) -> str:
@@ -36,34 +37,66 @@ def load_system_prompt(file_path: str) -> str:
 
 def load_training_data(file_path: str) -> list[dict]:
     import json
-    with open(file_path, "r") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         return [json.loads(line) for line in file]
 
 
-test_content = load_system_prompt(prompt_file_path)
-first_few_lines = "\n".join([json.dumps(line)
-                            for line in load_training_data(data_file_path)[:3]])
+def training_data_batcher(training_data: list[dict], batch_size=50):
+    """Yield successive n-sized chunks from data as a string of JSON lines."""
+    for i in range(0, len(training_data), batch_size):
+        batch_data = training_data[i : i + batch_size]
+        data_as_a_string = "\n".join([json.dumps(line) for line in batch_data])
+        yield data_as_a_string
 
+def make_single_request(client: Groq, system_prompt: str, training_data: str) -> str:
+    answer = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {
+                "role": "user",
+                "content": training_data,
+            },
+        ],
+        temperature=0.0,
+        max_tokens=BATCH_SIZE * 30, # Generous headroom for (expected) JSON output
+        seed=1
+    ).choices[0].message.content
 
-# Make the chat completion request
-client = create_groq_client()
-response = client.chat.completions.create(
-    model=MODEL_NAME,
-    messages=[
-        {
-            "role": "system",
-            "content": load_system_prompt(prompt_file_path),
-        },
-        {
-            "role": "user",
-            "content": first_few_lines,
-        },
-    ],
-    temperature=0.0,
-    # Generous headroom for 50 lines of (the expected) JSON output
-    max_tokens=1500,
-    seed=1
-)
+    if not answer:
+        raise ValueError("Received empty response from the model.")
 
-# Print the response text
-print(response.choices[0].message.content)
+    return answer
+
+def append_answers_to_file(answer: str, output_file_path: str):
+    with open(output_file_path, "a", encoding="utf-8") as file:
+        file.write(answer + "\n")
+
+def main():
+    system_prompt = load_system_prompt(prompt_file_path)
+    training_data = load_training_data(data_file_path)
+    training_batches = training_data_batcher(training_data, BATCH_SIZE)
+    groq_client = create_groq_client()
+
+    for batch_index, batch in enumerate(training_batches):
+        try:
+            #early test 
+            if batch_index >= 4:
+                print("Early test limit reached. Stopping")
+                break
+            
+            print(f"Processing batch [{batch_index}]...")
+            response = make_single_request(groq_client, system_prompt, batch)
+
+    
+        except Exception as e:
+            print(f"Error processing batch {batch_index}: {e}")
+        else:
+            append_answers_to_file(response, OUTPUT_FILE_NAME)
+
+if __name__ == "__main__":
+    main()
+
