@@ -2,6 +2,37 @@
 
 ## Notes
 
+
+### Gemini Response Format
+(as observed at the time)
+```py
+sdk_http_response=HttpResponse(
+  headers=<dict len=12>
+) candidates=[Candidate(
+  content=Content(
+    parts=[
+      Part(
+        text='The model answer is here',
+        thought_signature=b"\x01\x01\x01\x01\x01x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01\x01"
+      ),
+    ],
+    role='model'
+  ),
+  finish_reason=<FinishReason.STOP: 'STOP'>,
+  index=0
+)] create_time=None model_version='gemini-3.5-flash-lite' prompt_feedback=None response_id='rr_id_rrrrr_id' usage_metadata=GenerateContentResponseUsageMetadata(
+  candidates_token_count=7,
+  prompt_token_count=21,
+  prompt_tokens_details=[
+    ModalityTokenCount(
+      modality=<MediaModality.TEXT: 'TEXT'>,
+      token_count=21
+    ),
+  ],
+  total_token_count=28
+) model_status=None automatic_function_calling_history=[] parsed=None
+```
+
 ### Groq Response Format
 (as observed at the time)
 
