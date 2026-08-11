@@ -1,8 +1,8 @@
 import json
-from groq import Groq
+from google import genai
 
-USE_SAMPLE_DATA = True
-MODEL_NAME = "llama-3.1-8b-instant"
+USE_SAMPLE_DATA = False
+MODEL_NAME = "gemini-3.5-flash-lite"
 BATCH_SIZE = 50
 OUTPUT_FILE_NAME = "model_responses.jsonl"
 
@@ -20,14 +20,14 @@ def get_api_key() -> str:
     # adapt to however you want to retrieve the API key
     import keyring
 
-    api_key = keyring.get_password("groqAPIKey", "sample_user")
+    api_key = keyring.get_password("geminiAPIKey", "sample_user")
     if not api_key:
         raise ValueError("API key not found in keyring.")
     return api_key
 
 
-def create_groq_client() -> Groq:
-    return Groq(api_key=get_api_key(), max_retries=5)
+def create_client() -> genai.Client:
+    return genai.Client(api_key=get_api_key())
 
 
 def load_system_prompt(file_path: str) -> str:
@@ -44,59 +44,55 @@ def load_training_data(file_path: str) -> list[dict]:
 def training_data_batcher(training_data: list[dict], batch_size=50):
     """Yield successive n-sized chunks from data as a string of JSON lines."""
     for i in range(0, len(training_data), batch_size):
-        batch_data = training_data[i : i + batch_size]
+        batch_data = training_data[i: i + batch_size]
         data_as_a_string = "\n".join([json.dumps(line) for line in batch_data])
         yield data_as_a_string
 
-def make_single_request(client: Groq, system_prompt: str, training_data: str) -> str:
-    answer = client.chat.completions.create(
+
+def make_single_request(client: genai.Client, system_prompt: str, training_data: str) -> str:
+    response = client.models.generate_content(
         model=MODEL_NAME,
-        messages=[
-            {
-                "role": "system",
-                "content": system_prompt,
-            },
-            {
-                "role": "user",
-                "content": training_data,
-            },
-        ],
-        temperature=0.0,
-        max_tokens=BATCH_SIZE * 30, # Generous headroom for (expected) JSON output
-        seed=1
-    ).choices[0].message.content
+        config=genai.types.GenerateContentConfig(
+            system_instruction=system_prompt,
+            temperature=0.0,
+            max_output_tokens=BATCH_SIZE * 30,
+            seed=1,
+        ),
+        contents=training_data
+    )
 
-    if not answer:
-        raise ValueError("Received empty response from the model.")
+    # Access the generated text
+    result_text = response.text
 
-    return answer
+    if not result_text:
+        raise ValueError("No response text received from the model.")
+
+    print(f"Model response: {result_text}")
+
+    return result_text
+
 
 def append_answers_to_file(answer: str, output_file_path: str):
     with open(output_file_path, "a", encoding="utf-8") as file:
         file.write(answer + "\n")
 
+
 def main():
     system_prompt = load_system_prompt(prompt_file_path)
     training_data = load_training_data(data_file_path)
     training_batches = training_data_batcher(training_data, BATCH_SIZE)
-    groq_client = create_groq_client()
+    ai_client = create_client()
 
     for batch_index, batch in enumerate(training_batches):
         try:
-            #early test 
-            if batch_index >= 4:
-                print("Early test limit reached. Stopping")
-                break
-            
             print(f"Processing batch [{batch_index}]...")
-            response = make_single_request(groq_client, system_prompt, batch)
+            response = make_single_request(ai_client, system_prompt, batch)
 
-    
         except Exception as e:
             print(f"Error processing batch {batch_index}: {e}")
         else:
             append_answers_to_file(response, OUTPUT_FILE_NAME)
 
+
 if __name__ == "__main__":
     main()
-
