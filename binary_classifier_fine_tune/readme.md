@@ -4,6 +4,11 @@
 This folder contains code to build data for fine-tunning a simple classifier.
 
 The core idea is to use a LLM to correctly label the training dataset and use it to refine a smaller model.
+Augmented data (generated synthetically by a larger model) can also be used.
+
+### Data Gathering 
+`data_gather` folder
+
 
 The published repository uses sample/fake data at `sample_training_data.jsonl` and `sample_system_prompt.txt`. See those files to understand how to supply real data.
 
