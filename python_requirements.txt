@@ -1,9 +1,5 @@
-# some packages are quite heavy and probably already present/tuned in systems of users that deal with machine learning,
-# we can reuse them from the system site packages to avoid installing them again in the virtual environment:
-#   python -m venv --system-site-packages python_venv
-# For total isolation, install them inside the virtual env:
-# torch 
-# pandas
+# for this lab, I ain't gonna replicate torch in each virtual env (so I count on "venv --system-site-packages")
+# torch
 
 transformers~=5.15.0
 datasketch~=2.0.0
@@ -15,3 +11,8 @@ protobuf~=7.35.1
 tiktoken~=0.13.0
 tokenizers~=0.22.2
 sentencepiece~=0.2.2
+accelerate~=1.14.0
+
+datasets~=5.0.1
+scikit-learn~=1.9.0
+evaluate~=0.4.6
