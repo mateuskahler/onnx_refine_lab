@@ -1,12 +1,12 @@
 
-## Summary
+# Summary
 
 This folder contains code to build data for fine-tunning a simple classifier.
 
 The core idea is to use a LLM to correctly label the training dataset and use it to refine a smaller model.
 Augmented data (generated synthetically by a larger model) can also be used.
 
-### Data Gathering 
+## Data Gathering 
 `data_gather` folder
 
 
@@ -21,6 +21,15 @@ The published repository uses sample/fake data at `sample_training_data.jsonl` a
 - Sample prompt at `sample_data_augmentation_system_prompt.txt`
 - Sample script at `data_augmentation_Gemini.py`
 - Run `merge_augmentation_with_data.py` to merge training data with augmentation data.
+
+## Model Training
+`model_training` folder
+
+Save/bring all data to a file called `input_database.jsonl`, with expected format:
+```json
+{"id": "000", "language": "en", "is_it_about_ai": "no", "is_it_organic": "no", "text": "I like to fish"}
+{"id": "100", "language": "en", "is_it_about_ai": "yes", "is_it_organic": "yes", "text": "I like LLMs"}
+```
 
 ## Notes
 
