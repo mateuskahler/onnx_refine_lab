@@ -32,9 +32,11 @@ with open(ORGANIC_DATA_FILENAME, "r", encoding="utf-8") as organic_file:
 
 with open(OUTPUT_FILENAME, "w", encoding="utf-8") as output_file:
     for index, data in enumerate(organic_data):
-        item_dict = {"id": f"o{index}", "text": data["text"], "language": data["language"], label_key: data[label_key]}
+        item_dict = {"id": f"o{index}", "language": data["language"], label_key: data[label_key], "is_it_organic":"yes", "text": data["text"]}
         output_file.write(json.dumps(item_dict) + "\n")
         
     for index, data in enumerate(augmented_data):
-        item_dict = {"id": f"s{index}", "text": data["text"], "language": data["language"], label_key: data[label_key]}
+        item_dict = {"id": f"s{index}", "language": data["language"], label_key: data[label_key], "is_it_organic":"no", "text": data["text"]}
         output_file.write(json.dumps(item_dict) + "\n")
+
+print(f"Merging complete! Output saved to: {OUTPUT_FILENAME}")
