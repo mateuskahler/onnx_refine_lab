@@ -12,6 +12,11 @@ The published repository uses sample/fake data at `sample_training_data.jsonl` a
 - Run `reference_fetcher_Gemini/Groq/etc.py` to use the desired LLM to ground reference your data,
 - Run `merge_reference_with_data.py` to merge training data with reference answer.
 
+### Synthetic data
+- Sample prompt at `sample_data_augmentation_system_prompt.txt`
+- Sample script at `data_augmentation_Gemini.py`
+- Run `merge_augmentation_with_data.py` to merge training data with augmentation data.
+
 ## Notes
 
 ### Dependencies

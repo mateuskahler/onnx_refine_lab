@@ -1,3 +1,10 @@
+# some packages are quite heavy and probably already present/tuned in systems of users that deal with machine learning,
+# we can reuse them from the system site packages to avoid installing them again in the virtual environment:
+#   python -m venv --system-site-packages python_venv
+# For total isolation, install them inside the virtual env:
+# torch 
+# pandas
+
 datasketch~=2.0.0
 groq~=1.6.0
 keyring~=25.7.0
