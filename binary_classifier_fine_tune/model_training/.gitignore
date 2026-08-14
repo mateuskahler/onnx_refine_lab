@@ -1,3 +1,6 @@
 input_database.jsonl
 
 **/__pycache__/**
+
+training_output/**
+best_deberta_model/**
