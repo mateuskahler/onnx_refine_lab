@@ -1,9 +1,11 @@
 import json
 from google import genai
+import time
 
 USE_SAMPLE_DATA = True
 MODEL_NAME = "gemini-3.5-flash-lite"
 BATCH_SIZE = 50
+INTERVAL_BETWEEN_BATCHES = 15 # (seconds) for the free tier users like me :')
 OUTPUT_FILE_NAME = "model_responses.jsonl"
 
 
@@ -83,6 +85,7 @@ def main():
         try:
             print(f"Processing batch [{batch_index}]...")
             response = make_single_request(ai_client, system_prompt, batch)
+            time.sleep(INTERVAL_BETWEEN_BATCHES)
 
         except Exception as e:
             print(f"Error processing batch {batch_index}: {e}")
