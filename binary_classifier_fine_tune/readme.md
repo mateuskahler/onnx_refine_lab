@@ -15,12 +15,16 @@ The published repository uses sample/fake data at `sample_training_data.jsonl` a
 - Fill `training_data.jsonl` with input data,
 - Fill `system_prompt.txt` with the instruction set,
 - Run `reference_fetcher_Gemini/Groq/etc.py` to use the desired LLM to ground reference your data,
+- - `training_data.jsonl` -> `model_responses.jsonl`
 - Run `merge_reference_with_data.py` to merge training data with reference answer.
+- - `training_data.jsonl + model_responses.jsonl` -> `merged_file.jsonl`
 
 ### Synthetic data
 - Sample prompt at `sample_data_augmentation_system_prompt.txt`
 - Sample script at `data_augmentation_Gemini.py`
+- - -> `model_synthetic.jsonl`
 - Run `merge_augmentation_with_data.py` to merge training data with augmentation data.
+- - -> `merged_file.jsonl + model_synthetic.jsonl` -> `merged_file_with_augmentation.jsonl`
 
 ## Model Training
 `model_training` folder
@@ -36,7 +40,7 @@ Save/bring all data to a file called `input_database.jsonl`, with expected forma
 ### Dependencies
 `python_requirements.txt` : you can filter out backends that you don't plan to use (eg.: remove Groq if using only Gemini)
 
-The "merge" step is present because I decided to instruct the model not to return back the text which it was prompted to classify, to save tokens and remote processing power. The strategy is to return the id-number and match locally to the prompt text.
+The step during data gathering that "merges" the text with the classification was done to save tokens/processing power: We instruct the model to not return the provoking text, just the answer and the ID.
 
 ### Gemini Response Format
 (as observed at the time)
